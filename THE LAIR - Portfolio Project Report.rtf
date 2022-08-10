@@ -1,0 +1,66 @@
+{\rtf1\ansi\ansicpg1252\deff0\nouicompat\deflang1033{\fonttbl{\f0\fnil\fcharset0 Calibri;}}
+{\*\generator Riched20 10.0.22000}\viewkind4\uc1 
+\pard\sa200\sl276\slmult1\qc\b\f0\fs28\lang9 THE LAIR\b0\fs22\line Portfolio Project: Python Fundamentals\line by Doug Kissack\line\line\par
+
+\pard\sa200\sl276\slmult1\qc\tx2700\b 1. Introduction\b0\par
+
+\pard\sa200\sl276\slmult1\b Overview\b0 : \par
+THE LAIR is a text-based, roguelike RPG (roleplaying game).  The player creates a character and navigates it through a series of rooms.  In each room, there is an encounter - fighting an enemy, solving a puzzle, trading with a merchant, discovering treasure, etc.  \par
+As the player completes encounters, they gain experience (XP), items (loot), stats, magical abilities, and more - becoming increasingly powerful as they venture further into THE LAIR -and the challenges become proportionally more difficult or punishing.\par
+If the player survives long enough, they encounter the \b Final Boss\b0 .  Defeating the \b Final Boss \b0 allows the player to escape THE LAIR, winning the game.\par
+\b What is a "roguelike" game?\par
+\b0 A roguelike game is characterized by a "dungeon crawl" through a series of procedurally generated levels.  Death in a roguelike game is permanent (there is no "save" or "respawn" feature), and each playthrough of the game begins at the same starting point and progresses toward the same ending point.\par
+\b Key Feature\b0 : \b Procedural Generation\b0  \par
+Roguelike games can only be successful when each playthrough of the game feels fresh, unique, and exciting.  This is usually accomplished through procedural generation - e.g., the creation of data (in this case game content) by computers using algorithms and human-generated assets.\par
+THE LAIR features procedural generation in that \b ALL\b0  rooms, enemies, items, and spells are populated through functions and methods with random selections from very large lists of potential values.   Because of the sheer number of possible combinations, each playthrough of the game will feel familiar, but also unique.\par
+\par
+\par
+
+\pard\sa200\sl276\slmult1\qc\b 2. Design & Implementation:\par
+
+\pard\sa200\sl276\slmult1 Procedural Generation\b0\par
+My initial design began with creating \b Classes\b0  for the Items, Abilities, and Enemies.  \b Objects\b0  of these \b Classes\b0  were instantiated with empty or placeholder values.  \par
+I then created a series of tuples full of potential values for each \b Class\b0  attribute - e.g., the \b Enemy Class\b0  has a name attribute, so I created a tuple with many potential names.\par
+I then created \b methods\b0  for each \b Class\b0  that use the \b random module\b0  to make random selections from the appropriate tuples in order to populate their attributes.  \par
+Putting all of that together, I am able to instantiate \b Objects\b0  of each \b Class\b0  and call their "randomization" \b method\b0 , which populates their attributes with randomly selected values.  In this way, I can "procedurally generate" many of the core aspects of the game.\par
+\b The Player Object\b0\par
+Next, I needed a \b Class\b0  for the player's character.  I created this \b Class\b0  with attributes to store and update all of the character's stats, items, abilities, etc.  At the start of each playthrough of the game, a "blank" \b Player Object\b0  is created and assigned starting values for its attributes - e.g., the character always starts at Level 1 and has the same starting stats and gear.  \par
+Perhaps the most important aspect of the \b Player Object\b0  is its "stat" \b attributes\b0  - Staunch, Swift, Shrewd, and Suave.  During the game, the player will be rewarded with stat points, which can be assigned to one of these four stats.  \b Staunch\b0  increases their character's hitpoints and makes them deal more weapon damage, \b Swift\b0  makes their character more agile (allowing them to deal critical strikes or dodge incoming attacks), \b Shrewd\b0  increases the potency of their character's magic (making them do more damage and healing with spells), and \b Suave\b0  makes their character a more savvy negotiator, giving them better loot and discounts during trade.\par
+Stats allow the player to "build" their character in totally different ways, each with their own strengths and weaknesses.  This is a core aspect of roguelike games (and RPGs in general). \par
+\b The Core Gameplay Loop\b0\par
+Next, I needed to create a core gameplay loop that allowed the player to play the game.  I started by writing an intro - an overview of the rules of the game - that would also take inputs from the player to name their character and select their class.  \par
+I knew the structure of my game would be the player navigating their character through a series of challenges - I structured these as "rooms" in the dungeon which they would travel through in search of the exit.  I created 5 types of rooms - \i combat, event, camp, treasure, and trade\i0 .  \par
+I then wrote a \b while loop\b0  to serve as my core gameplay loop and created a \b global variable\b0  called room_count, which is an integer that increments by 1 each time the player enters a new room.  The \b while loop\b0  selects a random room type (with some logic to prevent the same type of room from being selected multiple times in a row) and increments the room_count by 1.  \par
+When the room_count reaches a specific number (in this case, 30) the loop exits and the player encounters the \b Final Boss\b0 .  If the player defeats the \b Final Boss\b0 , the game displays some "happy ending" outro text and the player is prompted to start a new playthrough or exit the application.\par
+\b The Room Functions\b0\par
+I now had a game that could procedurally generate objects and progress the player through a series of pseudo-randomly chosen rooms, but the rooms didn't do anything yet!  So I created 5 \b Functions\b0 , one for each type of room, which would handle that.\par
+I structured the code in this way: The \b Core Gameplay Loop\b0  selects a room type.  The \b Core Gameplay Loop\b0  then calls the appropriate \b Function\b0  for that room and passes the \b Player Object\b0  into the \b Function\b0  as an \b argument\b0 .  The \b Functions\b0  print text to the player describing what happens in the room, and prompt the player to make a series of choices.  Based on those choices, the \b Function\b0  changes the \b values\b0  of the \b Player Object's attributes\b0  - e.g., if the player is fighting an enemy and gets wounded, the \b Function\b0  reduces the \b Player Object's \b0 "hp" \b value\b0 .  If the player is trading with a merchant and buys a new sword, the \b Function\b0  adds the \b Item Object\b0  to the player's "inventory" \b value\b0  (a \b list\b0  of \b objects\b0 ) and decrements the player's "coin" \b value\b0  by the cost of the sword.\par
+\b The Combat Function\b0 : This \b Function \b0 generates a random \b Enemy Object\b0  and uses a \b while loop\b0  to pit the player and the enemy against each other in combat.  Each loop, the player and enemy "hp" \b attributes\b0  are checked, and if one or the other is \b <= 0\b0 , the loop breaks.  If the player defeats the enemy, they are rewarded with random amounts of experience and coin, and randomly generated \b Item Objects\b0  - weapons and armor they can equip, or consumable potions they can drink for temporary effects.\par
+\b The Event Function\b0 : This \b Function\b0  selects from a large list of different events.  These are mostly for storytelling purposes - the player can find and name an animal companion which joins them for the rest of the playthrough and fights alongside them in combat, encounter a divine being that enchants their gear with powerful effects, rescue a captive elemental in exchange for a reward, talk to a madman who wanders the halls of the dungeon, and more!  These events are critical to keep each playthrough of the game feeling fresh and exciting.\par
+\b The Camp Function\b0 : This \b Function\b0  allows the player to take a breather.  They can choose to "Rest" which restores their missing hp and mana, or "Train" which grants them bonus stat points.\par
+\b The Trade Function\b0 : This \b Function\b0  allows the player to trade with a merchant.  A list of randomly generated \b Item Objects\b0  is created and displayed to the player, and they can choose to buy items by spending their coin.  This is one of the primary ways that the player can obtain new and more powerful items for their character.  The player can also sell their old, obsolete items to the shop to get some coin back. \par
+\b The Treasure Function\b0 : In rooms 10 and 20, the player discovers a chest full of powerful items.  This is a "catch-up mechanism" that makes sure the player's character reaches the end of the game with high quality gear, just in case they had bad luck with their randomly generated items.  \par
+
+\pard\sa200\sl276\slmult1\qc\line\line\b 3. Conclusions\b0\par
+
+\pard\sa200\sl276\slmult1\b What I Learned:\b0  I started this project with the modest goal of making a very basic game with a story, combat, and loot.  I ended with a full-fledged, procedurally-generated RPG.  My biggest takeaways were: \par
+1) The power of object-oriented programming - I can't imagine how I could have accomplished any of this without objects.  \par
+2) There are always \b many\b0  ways to solve a problem while coding - the greater challenge is experimenting to find the quickest and most efficient solution.\par
+3) The importance of having a plan - this project grew beyond my expectations, and I continued adding new features as I went.  When I looked back over the "finished" product, I saw so many ways that I could have accomplished a task more clearly or more efficiently, but making the changes would require restructuring a ton of code!  Always plan out your project first and research how others have accomplished the same tasks. \par
+\b Best and Worst:\b0  The procedural generation of items, enemies, and spells is incredibly cool.  Even as the creator of the game, I found myself really enjoying seeing all the different combinations the game can create.\par
+On the other hand, while procedural generation is super cool, I didn't spend enough time "balancing" the numbers used to randomize the objects.  This resulted in some frustrating - and funny! - scenarios - e.g., the game created an enemy with a healing spell that was so powerful I could never kill it and it could never kill me, and I had to quit the game and start over.  I was stuck inside the combat loop forever! \par
+\b What I Would Do Differently\b0 : There are a lot of optimizations I know I can make, but the three things I would definitely change: \par
+1) I would spend more time balancing the numbers to prevent edge cases where enemies, items, or spells are way too powerful (or way too weak).  There has to be a happy medium where those things feel unique without being so swingy. \par
+2) I would create a "Unit" superclass and make the "Player" and "Enemy" classes subclasses of "Unit".  This would have saved me a bunch of time when writing the code. \par
+3) In general, I was not very consistent with my naming conventions for variables and functions.  I would have a better system for naming those things (it doesn't affect the gameplay, but I'm sure it makes the readability of my code suffer). \par
+\b Additional Features\b0\par
+I have a big list of these that I might add in the future.  Some of them are: \par
+1) Alternate Game Modes: e.g., instead of always playing for 30 rooms and fighting the Final Boss, I could have an "endless mode" where there is no Final Boss and the player keeps going until they inevitably die.\par
+2) The game allows the player to choose their class/archetype (e.g., Paladin, Rogue, Wizard, etc.), but that choice hardly affects the game at all.  I would like to write better logic into the object generation to allow for class-specific spells, items, events, etc., so that the choice of class feels impactful and exciting.\par
+3) I used the textwrap module and some ASCII art to make the game more pleasing to look at, but I'm sure I could go way further - it's still a bit of an eyesore.\par
+
+\pard\sa200\sl276\slmult1\qc\par
+
+\pard\sa200\sl276\slmult1\par
+}
+ 
